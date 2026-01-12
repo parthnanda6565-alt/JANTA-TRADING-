@@ -1,0 +1,347 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JANTA TRADING | Premium</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- CSS VARIABLES --- */
+        :root {
+            --green: #2E7D32;
+            --blue: #1976D2;
+            --white: #ffffff;
+            --glass: rgba(255, 255, 255, 0.15);
+            --border: rgba(255, 255, 255, 0.2);
+            --font: 'Inter', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            font-family: var(--font);
+            color: var(--white);
+            background: linear-gradient(-45deg, #0D47A1, #1976D2, #2E7D32, #1B5E20);
+            background-size: 400% 400%;
+            animation: ocean 15s ease infinite;
+            min-height: 100vh;
+            padding-bottom: 80px;
+        }
+
+        @keyframes ocean {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* --- UTILITIES --- */
+        .container { max-width: 600px; margin: 0 auto; padding: 0 20px; }
+        .hidden { display: none !important; }
+        
+        .glass-box {
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+        }
+
+        /* --- DASHBOARD (INTRO) --- */
+        #dashboard {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(-45deg, #0D47A1, #1976D2, #2E7D32, #1B5E20);
+            background-size: 400% 400%;
+            z-index: 9999;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            padding: 20px; text-align: center;
+        }
+
+        .dash-logo { font-size: 2.5rem; font-weight: 800; margin-bottom: 10px; }
+        .dash-logo span { color: #81c784; }
+        
+        .lang-btn {
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.4);
+            color: white; padding: 15px; width: 100%; max-width: 300px;
+            margin: 10px 0; border-radius: 50px; font-size: 1.1rem; font-weight: 600;
+            cursor: pointer; transition: 0.2s;
+        }
+        .lang-btn:active { transform: scale(0.95); background: white; color: var(--blue); }
+
+        /* --- MAIN APP --- */
+        nav {
+            padding: 15px 0;
+            position: sticky; top: 0; z-index: 100;
+            background: rgba(0,0,0,0.2); backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+        }
+        .nav-flex { display: flex; justify-content: space-between; align-items: center; }
+        .nav-logo { font-weight: 800; font-size: 1.2rem; }
+        .switch-btn { background: transparent; border: 1px solid white; color: white; padding: 5px 12px; border-radius: 20px; font-size: 0.8rem; }
+
+        .ticker {
+            background: rgba(0,0,0,0.3); height: 30px; overflow: hidden;
+            display: flex; align-items: center; font-size: 0.8rem; white-space: nowrap;
+        }
+        .ticker span { display: inline-block; padding-left: 100%; animation: scroll 20s linear infinite; }
+        @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
+
+        .hero { text-align: center; padding: 40px 0; }
+        .hero h1 { font-size: 2rem; font-weight: 300; margin-bottom: 5px; }
+        .hero b { font-weight: 800; color: #a5d6a7; }
+
+        /* --- TABS --- */
+        .tabs { display: flex; background: rgba(0,0,0,0.2); border-radius: 15px; padding: 4px; margin-bottom: 20px; }
+        .tab { flex: 1; padding: 10px; text-align: center; border-radius: 12px; color: rgba(255,255,255,0.6); font-weight: 600; font-size: 0.9rem; border: none; background: transparent; }
+        .tab.active { background: rgba(255,255,255,0.2); color: white; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+
+        /* --- LIST --- */
+        .list-item {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .list-item:last-child { border-bottom: none; }
+        .item-price { font-weight: 800; font-size: 1.1rem; }
+
+        /* --- CALCULATOR --- */
+        .calc-input {
+            width: 100%; padding: 15px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 12px; color: white; font-size: 1rem; margin-bottom: 15px; outline: none;
+        }
+        option { background: #000; }
+        
+        .result-area { text-align: center; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 20px; margin-top: 10px; }
+        .total { font-size: 2.5rem; font-weight: 800; margin: 10px 0; }
+        
+        .btn-action {
+            width: 100%; padding: 15px; background: white; color: var(--green);
+            border: none; border-radius: 12px; font-weight: 800; font-size: 1rem;
+            margin-top: 10px; cursor: pointer;
+        }
+
+        /* --- FLOATING ELEMENTS --- */
+        .whatsapp {
+            position: fixed; bottom: 20px; right: 20px;
+            background: #25D366; color: white; padding: 12px 20px;
+            border-radius: 50px; text-decoration: none; font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3); display: flex; align-items: center; gap: 8px;
+            z-index: 200; border: 2px solid white;
+        }
+
+        .map-btn {
+            display: block; text-align: center; margin-top: 20px; 
+            padding: 12px; border: 1px solid white; border-radius: 12px;
+            color: white; text-decoration: none; font-weight: bold;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="dashboard">
+        <div class="dash-logo">JANTA <span>TRADING</span></div>
+        <p style="margin-bottom: 30px; opacity: 0.8;">Premium Scrap Exchange</p>
+        
+        <button class="lang-btn" onclick="startApp('en')">English</button>
+        <button class="lang-btn" onclick="startApp('gj')">ગુજરાતી</button>
+    </div>
+
+    <div id="app" class="hidden">
+        
+        <nav>
+            <div class="container nav-flex">
+                <div class="nav-logo">JANTA TRADING</div>
+                <button class="switch-btn" onclick="toggleLang()" id="btn-lang">ગુજરાતી</button>
+            </div>
+        </nav>
+
+        <div class="ticker">
+            <span id="ticker-text">Loading...</span>
+        </div>
+
+        <div class="container">
+            <div class="hero">
+                <h1 id="hero-title">Clean Home.<br><b>Full Wallet.</b></h1>
+                <p id="hero-sub">Janta Trading • Jamnagar</p>
+            </div>
+
+            <div class="tabs">
+                <button class="tab active" onclick="switchView('rates')" id="tab-rates">Rates</button>
+                <button class="tab" onclick="switchView('calc')" id="tab-calc">Calculator</button>
+            </div>
+
+            <div id="view-rates" class="glass-box">
+                <div id="rates-list"></div> </div>
+
+            <div id="view-calc" class="glass-box hidden">
+                <label style="display:block; margin-bottom:5px; font-size:0.8rem; opacity:0.7;" id="lbl-item">Item</label>
+                <select id="sel-item" class="calc-input" onchange="calculate()">
+                    <option value="0">Select...</option>
+                </select>
+
+                <label style="display:block; margin-bottom:5px; font-size:0.8rem; opacity:0.7;" id="lbl-qty">Weight</label>
+                <input type="number" id="inp-qty" class="calc-input" placeholder="0" oninput="calculate()">
+
+                <div class="result-area">
+                    <div style="font-size:0.8rem; opacity:0.7;" id="lbl-est">ESTIMATED VALUE</div>
+                    <div class="total" id="res-total">₹0</div>
+                    <div id="res-rate" style="font-size:0.9rem; margin-bottom:15px;">Rate: 0</div>
+                    <button class="btn-action" onclick="lock()" id="btn-lock">LOCK PRICE</button>
+                </div>
+            </div>
+
+            <a href="https://www.google.com/maps/search/?api=1&query=Jamnagar+Gujarat" target="_blank" class="map-btn" id="btn-map">
+                📍 Locate Center on Map
+            </a>
+
+            <div style="text-align: center; margin-top: 30px; font-size: 0.7rem; opacity: 0.6;">
+                © 2026 Janta Trading.
+            </div>
+        </div>
+    </div>
+
+    <a href="https://wa.me/919924463985" target="_blank" class="whatsapp">
+        📷 <span id="btn-wa">Snap & Quote</span>
+    </a>
+
+    <script>
+        // DATA
+        const items = [
+            { id: 1, en: "Cartbox", gj: "પૂંઠું (Cartbox)", price: 14 },
+            { id: 2, en: "Iron Sheet", gj: "લોખંડ પતરા", price: 20 },
+            { id: 3, en: "Iron", gj: "લોખંડ", price: 25 },
+            { id: 4, en: "Newspaper", gj: "પસ્તી", price: 15 },
+            { id: 5, en: "Plastic", gj: "પ્લાસ્ટિક", price: 15 },
+            { id: 6, en: "Aluminium", gj: "એલ્યુમિનિયમ", price: 145 },
+            { id: 7, en: "Copper", gj: "તાંબુ", price: 720 },
+            { id: 8, en: "Brass", gj: "પીતળ", price: 480 },
+            { id: 9, en: "Steel", gj: "સ્ટીલ", price: 40 },
+            { id: 10, en: "Battery", gj: "બેટરી", price: 90 },
+            { id: 11, en: "Old Phone", gj: "જૂનો ફોન", price: 40 }
+        ];
+
+        // TEXT TRANSLATIONS
+        const text = {
+            en: {
+                hero: "Clean Home.<br><b>Full Wallet.</b>",
+                sub: "Premium Scrap Exchange | Jamnagar",
+                tabR: "Rates", tabC: "Calculator",
+                lblI: "Select Item", lblQ: "Weight / Qty", lblE: "ESTIMATED PAYOUT",
+                btnL: "LOCK PRICE & SELL", btnW: "Snap & Quote", btnM: "📍 Locate Center on Map",
+                lang: "ગુજરાતી"
+            },
+            gj: {
+                hero: "સ્વચ્છ ઘર.<br><b>ભરેલું પાકીટ.</b>",
+                sub: "પ્રીમિયમ ભંગાર સેવાઓ | જામનગર",
+                tabR: "બજાર ભાવ", tabC: "કેલ્ક્યુલેટર",
+                lblI: "વસ્તુ પસંદ કરો", lblQ: "વજન / જથ્થો", lblE: "અંદાજિત ચુકવણી",
+                btnL: "ભાવ નક્કી કરો", btnW: "ફોટો મોકલો", btnM: "📍 નકશા પર જુઓ",
+                lang: "English"
+            }
+        };
+
+        let curLang = 'en';
+
+        // 1. START APP
+        function startApp(lang) {
+            curLang = lang;
+            document.getElementById('dashboard').style.display = 'none';
+            document.getElementById('app').classList.remove('hidden');
+            render();
+        }
+
+        // 2. TOGGLE LANG INSIDE APP
+        function toggleLang() {
+            curLang = (curLang === 'en') ? 'gj' : 'en';
+            render();
+        }
+
+        // 3. RENDER UI
+        function render() {
+            const t = text[curLang];
+            
+            // Labels
+            document.getElementById('hero-title').innerHTML = t.hero;
+            document.getElementById('hero-sub').innerText = t.sub;
+            document.getElementById('tab-rates').innerText = t.tabR;
+            document.getElementById('tab-calc').innerText = t.tabC;
+            document.getElementById('lbl-item').innerText = t.lblI;
+            document.getElementById('lbl-qty').innerText = t.lblQ;
+            document.getElementById('lbl-est').innerText = t.lblE;
+            document.getElementById('btn-lock').innerText = t.btnL;
+            document.getElementById('btn-wa').innerText = t.btnW;
+            document.getElementById('btn-map').innerText = t.btnM;
+            document.getElementById('btn-lang').innerText = t.lang;
+
+            // Render List & Ticker & Select
+            const list = document.getElementById('rates-list');
+            const sel = document.getElementById('sel-item');
+            const tick = document.getElementById('ticker-text');
+            
+            list.innerHTML = '';
+            sel.innerHTML = `<option value="0">${t.lblI}...</option>`;
+            let tickerStr = '';
+
+            items.forEach(item => {
+                let name = curLang === 'en' ? item.en : item.gj;
+                
+                // List Item
+                list.innerHTML += `
+                    <div class="list-item">
+                        <span>${name}</span>
+                        <span class="item-price">₹${item.price}</span>
+                    </div>`;
+                
+                // Dropdown Option
+                let opt = document.createElement('option');
+                opt.value = item.id;
+                opt.innerText = name;
+                sel.appendChild(opt);
+
+                // Ticker
+                tickerStr += `${name}: ₹${item.price}  •  `;
+            });
+
+            tick.innerText = tickerStr + tickerStr; // Duplicate for length
+        }
+
+        // 4. SWITCH TABS
+        function switchView(view) {
+            document.getElementById('view-rates').classList.add('hidden');
+            document.getElementById('view-calc').classList.add('hidden');
+            document.getElementById('view-' + view).classList.remove('hidden');
+            
+            document.getElementById('tab-rates').classList.remove('active');
+            document.getElementById('tab-calc').classList.remove('active');
+            document.getElementById('tab-' + view).classList.add('active');
+        }
+
+        // 5. CALCULATE
+        function calculate() {
+            const id = document.getElementById('sel-item').value;
+            const qty = document.getElementById('inp-qty').value;
+            const item = items.find(i => i.id == id);
+
+            if(item && qty > 0) {
+                let total = Math.floor(item.price * qty);
+                document.getElementById('res-total').innerText = "₹" + total.toLocaleString();
+                document.getElementById('res-rate').innerText = `Rate: ₹${item.price}`;
+            } else {
+                document.getElementById('res-total').innerText = "₹0";
+                document.getElementById('res-rate').innerText = "Rate: 0";
+            }
+        }
+
+        // 6. LOCK PRICE
+        function lock() {
+            const total = document.getElementById('res-total').innerText;
+            if(total === "₹0") { alert("Select item first!"); return; }
+            alert("✅ Price Locked: " + total + "\n\nCall +91 99244 63985 now.");
+        }
+
+    </script>
+</body>
+</html>
